@@ -14,7 +14,6 @@
 struct list_head {
 	struct list_head* next; 
 	struct list_head* prev;
-    uint64_t count;
 };
 
 struct blist
@@ -89,7 +88,6 @@ stack_t * stack_init()
 {
     stack_t * stack = malloc(sizeof(stack_t));
     INIT_LIST_HEAD(stack);
-    stack->count = 0;
     return stack;
 }
 
@@ -103,7 +101,6 @@ int stack_pop(stack_t * s,void ** item)
     list_del(list_tail);
     struct blist * node = list_entry(list_tail,struct blist,listhead);
     *item = node->item;
-    s->count--;
     return 0;
 }
 int stack_top(stack_t * s,void ** item)
@@ -126,12 +123,18 @@ int stack_push(stack_t * s, void * item)
     }
     new->item = item;
     list_add_tail(&new->listhead,s);
-    s->count++;
     return 0;
 }
 int stack_size(stack_t * s)
 {
-    return s->count;
+    int count = 0;
+    struct list_head * p;
+    list_for_each(p,s)
+    {   
+        ++count;
+    }
+
+    return count;
 }
 int stack_empty(stack_t * s)
 {

@@ -1,0 +1,44 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AR	Makefile	/^AR = ar$/;"	m
+CC	Makefile	/^CC = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -std=c99 -O2 -g -ffunction-sections -Wall -Wshadow -Werror \\$/;"	m
+DLL_FLAGS	Makefile	/^DLL_FLAGS = \\$/;"	m
+EXTRA_CFLAGS	Makefile	/^EXTRA_CFLAGS ?=$/;"	m
+INCLUDES	Makefile	/^INCLUDES =  $/;"	m
+INIT_LIST_HEAD	stack.c	/^void INIT_LIST_HEAD(struct list_head *list)$/;"	f
+MKDIR	Makefile	/^MKDIR = mkdir -p$/;"	m
+RM	Makefile	/^RM = rm -f$/;"	m
+SOURCES	Makefile	/^SOURCES := \\$/;"	m
+_STACK_H	stack.h	9;"	d
+__list_add	stack.c	/^static inline void __list_add(struct list_head *new,$/;"	f	file:
+__list_del	stack.c	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f	file:
+blist	stack.c	/^struct blist$/;"	s	file:
+count	stack.c	/^    uint64_t count;$/;"	m	struct:list_head	file:
+item	stack.c	/^    void * item;$/;"	m	struct:blist	file:
+list_add	stack.c	/^void list_add(struct list_head *new, struct list_head *head)$/;"	f
+list_add_tail	stack.c	/^void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f
+list_del	stack.c	/^void list_del(struct list_head *entry)$/;"	f
+list_empty	stack.c	/^static inline int list_empty(const struct list_head *head)$/;"	f	file:
+list_entry	stack.c	77;"	d	file:
+list_for_each	stack.c	80;"	d	file:
+list_for_each_safe	stack.c	84;"	d	file:
+list_head	stack.c	/^struct list_head {$/;"	s	file:
+list_move_tail	stack.c	/^void list_move_tail(struct list_head *list,$/;"	f
+listhead	stack.c	/^	struct list_head listhead;$/;"	m	struct:blist	typeref:struct:blist::list_head	file:
+main	main.c	/^int main(int argc, char ** argv)$/;"	f
+next	stack.c	/^	struct list_head* next; $/;"	m	struct:list_head	typeref:struct:list_head::list_head	file:
+prev	stack.c	/^	struct list_head* prev;$/;"	m	struct:list_head	typeref:struct:list_head::list_head	file:
+stack_empty	stack.c	/^int stack_empty(stack_t * s)$/;"	f
+stack_init	stack.c	/^stack_t * stack_init()$/;"	f
+stack_pop	stack.c	/^int stack_pop(stack_t * s,void ** item)$/;"	f
+stack_pop_view	main.c	/^void stack_pop_view(stack_t * s)$/;"	f
+stack_push	stack.c	/^int stack_push(stack_t * s, void * item)$/;"	f
+stack_size	stack.c	/^int stack_size(stack_t * s)$/;"	f
+stack_t	stack.h	/^typedef struct list_head stack_t;$/;"	t	typeref:struct:list_head
+stack_top	stack.c	/^int stack_top(stack_t * s,void ** item)$/;"	f
+stack_top_view	main.c	/^void stack_top_view(stack_t * s)$/;"	f
