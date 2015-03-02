@@ -1,0 +1,30 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+TMC_QUEUE_NO_FLAGS	queue.h	4;"	d
+TMC_QUEUE_SINGLE_RECEIVER	queue.h	6;"	d
+TMC_QUEUE_SINGLE_SENDER	queue.h	5;"	d
+__QUEUE_INTEL_H__	queue.h	2;"	d
+__queue	queue.c	/^struct __queue$/;"	s	file:
+dequeue_count	queue.c	/^    uint64_t dequeue_count;$/;"	m	struct:__queue	file:
+dequeue_mutex	queue.c	/^    pthread_mutex_t dequeue_mutex;$/;"	m	struct:__queue	file:
+empty	queue.c	/^    pthread_cond_t empty;$/;"	m	struct:__queue	file:
+enqueue_count	queue.c	/^    uint64_t enqueue_count;$/;"	m	struct:__queue	file:
+enqueue_mutex	queue.c	/^    pthread_mutex_t enqueue_mutex;$/;"	m	struct:__queue	file:
+exit_if_ptr_is_null	queue.c	/^static inline void exit_if_ptr_is_null(void * p, char * des)$/;"	f	file:
+flags	queue.c	/^    uint32_t flags;$/;"	m	struct:__queue	file:
+full	queue.c	/^    pthread_cond_t full;$/;"	m	struct:__queue	file:
+global_log2_entries	queue.c	/^static uint32_t global_log2_entries = 0;$/;"	v	file:
+item_size	queue.c	/^    int item_size;$/;"	m	struct:__queue	file:
+length	queue.c	/^    unsigned int length;$/;"	m	struct:__queue	file:
+node	queue.c	/^    void ** node;$/;"	m	struct:__queue	file:
+queue_dequeue	queue.c	/^int queue_dequeue(queue_t * queue,$/;"	f
+queue_dequeue_multiple	queue.c	/^int queue_dequeue_multiple(queue_t * queue,$/;"	f
+queue_enqueue	queue.c	/^int queue_enqueue(queue_t * queue,$/;"	f
+queue_enqueue_multiple	queue.c	/^int queue_enqueue_multiple(queue_t * queue,$/;"	f
+queue_init	queue.c	/^queue_t * queue_init(int log2_entries, uint32_t flags)$/;"	f
+queue_t	queue.h	/^typedef struct __queue queue_t;                                                                                          $/;"	t	typeref:struct:__queue
+total	queue.c	/^    unsigned int total;$/;"	m	struct:__queue	file:
