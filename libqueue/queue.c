@@ -16,7 +16,6 @@
 #include "queue.h"
 
 
-static uint32_t global_log2_entries = 0;
 static inline void exit_if_ptr_is_null(void * p, char * des)
 {
     if(p == NULL)
@@ -53,7 +52,6 @@ queue_t * queue_init(int log2_entries, uint32_t flags)
     queue->enqueue_count = 0;
     pthread_mutex_init(&queue->enqueue_mutex,NULL);
     pthread_mutex_init(&queue->dequeue_mutex,NULL);
-    global_log2_entries = log2_entries;
     return queue;
 }
 int queue_enqueue(queue_t * queue,
@@ -66,13 +64,13 @@ int queue_enqueue(queue_t * queue,
         pthread_mutex_lock(&queue->enqueue_mutex);
     }
 
-    if(queue->enqueue_count - queue->dequeue_count >= (1 << global_log2_entries))
+    if(queue->enqueue_count - queue->dequeue_count >= (queue->total))
     {
         result = -1;
     }
     else
     {
-        unsigned int i = queue->enqueue_count & ((1 << global_log2_entries) - 1);
+        unsigned int i = queue->enqueue_count & ((queue->total) - 1);
         queue->node[i] = data;
         ++queue->enqueue_count;
         ++queue->length;
@@ -93,7 +91,7 @@ int queue_enqueue_multiple(queue_t * queue,
     {
         pthread_mutex_lock(&queue->enqueue_mutex);
     }
-    if(queue->enqueue_count + enqueue_num - queue->dequeue_count > (1 << global_log2_entries))
+    if(queue->enqueue_count + enqueue_num - queue->dequeue_count > (queue->total))
     {
         result = -1;
     }
@@ -102,7 +100,7 @@ int queue_enqueue_multiple(queue_t * queue,
         unsigned int enqueue_count = queue->enqueue_count;
         while(enqueue_num--)
         {
-            unsigned int i = enqueue_count & ((1 << global_log2_entries) - 1);
+            unsigned int i = enqueue_count & ((queue->total) - 1);
             queue->node[i] = *(data++);
             ++queue->length;
             ++enqueue_count;
@@ -133,7 +131,7 @@ int queue_dequeue(queue_t * queue,
     }
     else
     {
-        unsigned int i = queue->dequeue_count & ((1 << global_log2_entries) - 1);
+        unsigned int i = queue->dequeue_count & ((queue->total) - 1);
         *data = queue->node[i];
         ++queue->dequeue_count;
         --queue->length;
@@ -164,7 +162,7 @@ int queue_dequeue_multiple(queue_t * queue,
         unsigned int dequeue_count = queue->dequeue_count;
         while(dequeue_num--)
         {
-            unsigned int i = dequeue_count & ((1 << global_log2_entries) - 1);
+            unsigned int i = dequeue_count & ((queue->total) - 1);
             *(data++) = queue->node[i];
             --queue -> length;
             dequeue_count++;
@@ -184,7 +182,7 @@ int queue_empty(queue_t * queue)
 }
 int queue_full(queue_t * queue)
 {
-    return queue->enqueue_count - queue->dequeue_count >= (1 << global_log2_entries);
+    return queue->enqueue_count - queue->dequeue_count >= (queue->total);
 }
 int queue_size(queue_t * queue)
 {
