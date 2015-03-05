@@ -1,0 +1,47 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+INIT_LIST_HEAD	hash.c	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f	file:
+L_HASH_H	hash.h	9;"	d
+__LIST_H_	list.h	10;"	d
+__list_add	hash.c	/^static inline void __list_add(struct list_head *new,$/;"	f	file:
+__list_del	hash.c	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f	file:
+_bucket	hash.c	/^struct _bucket { $/;"	s	file:
+_hash_table	hash.c	/^struct _hash_table {$/;"	s	file:
+blist	hash.c	/^struct blist$/;"	s	file:
+bucket_t	hash.h	/^typedef struct _bucket     bucket_t; $/;"	t	typeref:struct:_bucket
+buckets	hash.c	/^    bucket_t *buckets;$/;"	m	struct:_hash_table	file:
+compare_item	hash.c	/^    compare_item_fp compare_item;$/;"	m	struct:_hash_table	file:
+compare_item_fp	hash.h	/^typedef int (*compare_item_fp)(void * a,void *b);$/;"	t
+count	hash.c	/^    uint32_t count;$/;"	m	struct:_bucket	file:
+exit_if_ptr_is_null	hash.c	/^static inline void exit_if_ptr_is_null(void * p, char * des)$/;"	f	file:
+find_list	hash.c	/^static struct blist * find_list(hash_table * table, $/;"	f	file:
+hash_add_item	hash.c	/^int  hash_add_item(hash_table ** htp, uint32_t key, void * value )$/;"	f
+hash_count	hash.c	/^uint32_t hash_count(hash_table * ht)$/;"	f
+hash_create	hash.c	/^hash_table * hash_create(int num)$/;"	f
+hash_key	hash.c	/^    hash_key_fp     hash_key;$/;"	m	struct:_hash_table	file:
+hash_key_fp	hash.h	/^typedef uint32_t (*hash_key_fp)(void * item);$/;"	t
+hash_lookup_item	hash.c	/^void * hash_lookup_item(hash_table * ht, void * value)$/;"	f
+hash_table	hash.h	/^typedef struct _hash_table hash_table;$/;"	t	typeref:struct:_hash_table
+hash_travel_delete	hash.c	/^void  hash_travel_delete(hash_table * ht)$/;"	f
+item	hash.c	/^	void * item;$/;"	m	struct:blist	file:
+list	hash.c	/^    struct list_head list;$/;"	m	struct:_bucket	typeref:struct:_bucket::list_head	file:
+list_add	hash.c	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f	file:
+list_add_tail	hash.c	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f	file:
+list_del	hash.c	/^static inline void list_del(struct list_head *entry)$/;"	f	file:
+list_empty	hash.c	/^static inline int list_empty(const struct list_head *head)$/;"	f	file:
+list_entry	hash.c	72;"	d	file:
+list_for_each	hash.c	74;"	d	file:
+list_for_each_safe	hash.c	77;"	d	file:
+list_head	hash.c	/^struct list_head {$/;"	s	file:
+list_move_tail	hash.c	/^static inline void list_move_tail(struct list_head *list,$/;"	f	file:
+listhead	hash.c	/^	struct list_head listhead;$/;"	m	struct:blist	typeref:struct:blist::list_head	file:
+lock	hash.c	/^    pthread_mutex_t  lock;$/;"	m	struct:_bucket	file:
+next	hash.c	/^	struct list_head* next; $/;"	m	struct:list_head	typeref:struct:list_head::list_head	file:
+next_prime	hash.c	/^static inline int next_prime(int x)$/;"	f	file:
+num_buckets	hash.c	/^    int num_buckets;$/;"	m	struct:_hash_table	file:
+prev	hash.c	/^	struct list_head* prev;$/;"	m	struct:list_head	typeref:struct:list_head::list_head	file:
+view_item_fp	hash.h	/^typedef int (*view_item_fp)(void * a);$/;"	t

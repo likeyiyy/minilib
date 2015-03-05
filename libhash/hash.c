@@ -77,27 +77,35 @@ static inline int list_empty(const struct list_head *head)
 #define list_for_each_safe(pos, n, head) \
 	for (pos = (head)->next, n = pos->next; pos != (head); \
 			pos = n, n = pos->next)
+
 struct _bucket { 
     struct list_head list;
     pthread_mutex_t  lock;
     uint32_t count;
 }; 
 struct _hash_table {
-        int num_buckets;
-        bucket_t *buckets;
+    int num_buckets;
+    compare_item_fp compare_item;
+    hash_key_fp     hash_key;
+    hash_found_fp   item_not_found;
+    hash_found_fp   item_found;
+    bucket_t *buckets;
 };
 
 
 
 
-struct blist * find_list(struct list_head * head, void * item)
+static struct blist * find_list(hash_table * ht, 
+                                struct list_head * head, 
+                                void * item)
 {
     struct list_head * p;
     struct blist * node;
+    exit_if_ptr_is_null(ht->compare_item,"table->compare_item == NULL");
     list_for_each(p,head)
     {
         node = list_entry(p,struct blist,listhead);
-        if(compare_session(&node->item, flow) == 0)
+        if(ht->compare_item(&node->item, item) == 0)
         {
             return node;
         }
@@ -134,19 +142,23 @@ static inline int next_prime(int x)
 /*
 * 1. 创建
 * */
-hash_table * hash_create(int num)
+hash_table * hash_create(int num,
+                        compare_item_fp compare,
+                        hash_key_fp hash_key)
 {
-    hash_table * result;
+    hash_table * ht;
     bucket_t * b;
     int bytes;
     int i;
-    result = malloc(sizeof(hash_table));
-    exit_if_ptr_is_null(result,"Initizial hash table Error"); 
+    ht = malloc(sizeof(hash_table));
+    exit_if_ptr_is_null(ht,"Initizial hash table Error"); 
     num = next_prime(num);
     bytes = num * sizeof(bucket_t);
-    result->buckets = b = malloc(bytes);
-    exit_if_ptr_is_null(result->buckets,"hash table buckets alloc error");
-    result->num_buckets = num;
+    ht->buckets = b = malloc(bytes);
+    exit_if_ptr_is_null(ht->buckets,"hash table buckets alloc error");
+    ht->num_buckets = num;
+    ht->compare_item = compare;
+    ht->hash_key     = hash_key;
     i = num;
     while(--i >= 0)
     {
@@ -155,58 +167,42 @@ hash_table * hash_create(int num)
         b->count = 0;
         b++;
     }
-    return result;
+    return ht;
 }
 /*
 * 2. 查找
 * */
-void * hash_lookup_item(hash_table * ht, uint32_t key, void * value)
+void * hash_lookup_item(hash_table * ht, void * value)
 {
-    struct blist * list = (struct blist *)value;
     struct list_head * ll;
-    session_item_t * session = &list->item;
+    exit_if_ptr_is_null(ht->hash_key,"hash key is null");
+    uint32_t key = ht->hash_key(value);
     bucket_t * bucket = &ht -> buckets[key % ht->num_buckets];
     ll = &bucket->list;
-    return (void *) find_list(ll,(flow_item_t *)session);    
-}
-static inline void make_new_session(struct blist * blist,
-                                    flow_item_t * flow,
-                                    manager_t * manager)
-{
-    session_item_t * item = &blist->item;
-    item->pool       = manager->session_pool;
-    item->length     = global_config->manager_buffer_size;
-    item->cur_len    = 0;
-    item->upper_ip   = flow->upper_ip;
-    item->lower_ip   = flow->lower_ip;
-    item->upper_port = flow->upper_port;
-    item->lower_port = flow->lower_port;
-    item->protocol   = flow->protocol;
-    item->last_time  = GET_CYCLE_COUNT();
-    memcpy(item->buffer,flow->payload,flow->payload_len);
-    item->cur_len  += flow->payload_len;
+    return (void *) find_list(ht, ll, value);    
 }
 /*
 * 3. 插入
 * 严格说来,blist 完全没有任何问题。
 * */
-int  hash_add_item(hash_table ** htp, uint32_t key, void * value )
+int  hash_add_item(hash_table * ht, void * value )
 {
     struct list_head * ll;
     struct blist * blist;
     struct blist * new_blist;
-    hash_table * ht = *htp;
-    //flow_item_t * flow = (flow_item_t *)value;
-    //manager_t * manager = list_entry(htp,manager_t,ht);
+
+    exit_if_ptr_is_null(ht->hash_key,"hash key is null");
+    uint32_t key = ht->hash_key(value);
     bucket_t * bucket = &ht -> buckets[key % ht->num_buckets];
     pthread_mutex_lock(&bucket->lock);
     ll = &bucket->list;
-    blist = find_list(ll,flow);    
+    blist = find_list(ht, ll, value);    
     /*
      * 假如不存在于链表中。
      * */
     if(!blist)
     {
+        ht->item_not_found(ht,ll,value);
     }
     /* 
     * Found it, and memcpy it.
@@ -214,7 +210,7 @@ int  hash_add_item(hash_table ** htp, uint32_t key, void * value )
     * */
     else
     {
-
+        ht->item_found(ht,ll,value);
     }
     pthread_mutex_unlock(&bucket->lock);
     return 0;
